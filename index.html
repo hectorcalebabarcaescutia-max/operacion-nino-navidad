@@ -79,19 +79,20 @@
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-lg sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-                <img src="img/logo.png" alt="Logo" width="40" height="40" class="rounded-circle bg-white p-1" onerror="this.style.display='none'">
-                <span class="fw-bold text-white">🎁 Samaritan's Purse</span>
+                <img src="img/logo.png" alt="Logo" width="40" height="40" class="rounded-circle bg-white p-1" onerror="this.src='https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=100&auto=format&fit=crop'">
+                <span class="fw-bold text-white fs-6 fs-md-5">🎁 Samaritan's Purse</span>
             </a>
             <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <div class="d-flex flex-column flex-lg-row gap-2 mt-3 mt-lg-0">
-                    <button onclick="cambiarVista('form')" id="btn-form" class="btn btn-success btn-animated fw-bold">
+                <!-- Corrección de desborde con flex-wrap y botones responsivos -->
+                <div class="d-flex flex-wrap gap-2 mt-3 mt-lg-0 w-100 w-lg-auto justify-content-end">
+                    <button onclick="cambiarVista('form')" id="btn-form" class="btn btn-success btn-animated fw-bold flex-fill flex-lg-grow-0 text-truncate">
                         <i class="bi bi-journal-plus me-1"></i> Registrar Iglesia
                     </button>
-                    <button onclick="cambiarVista('admin')" id="btn-admin" class="btn btn-outline-light btn-animated fw-bold">
-                        <i class="bi bi-gear-fill me-1"></i> Panel Administrador
+                    <button onclick="cambiarVista('admin')" id="btn-admin" class="btn btn-outline-light btn-animated fw-bold flex-fill flex-lg-grow-0 text-truncate">
+                        <i class="bi bi-gear-fill me-1"></i> Panel Admin
                     </button>
                 </div>
             </div>
@@ -133,8 +134,14 @@
 
         <!-- ================= VISTA 1: FORMULARIO DE REGISTRO ================= -->
         <section id="vista-form" class="card-custom p-4 p-md-5">
-            <h2 class="text-title-green mb-2"><i class="bi bi-clipboard2-plus-fill me-2"></i>Concentrado General de Niños por Iglesia</h2>
-            <p class="text-muted mb-4">Complete la información general y registre los nombres de los niños separados por edades.</p>
+            <!-- Logo institucional en la cabecera del formulario -->
+            <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom">
+                <img src="img/logo.png" alt="Logo" width="55" height="55" class="rounded-circle bg-white shadow-sm p-1 border" onerror="this.src='https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=100&auto=format&fit=crop'">
+                <div>
+                    <h2 class="text-title-green mb-1 fs-4 fs-md-3"><i class="bi bi-clipboard2-plus-fill me-2"></i>Concentrado General de Niños por Iglesia</h2>
+                    <p class="text-muted mb-0 small">Complete la información general y registre los nombres de los niños separados por edades.</p>
+                </div>
+            </div>
 
             <form id="form-iglesia" onsubmit="guardarRegistro(event)" class="row g-3">
                 <div class="col-md-6">
@@ -228,7 +235,10 @@
         <section id="vista-admin" class="d-none">
             <!-- Login por Zona -->
             <div id="admin-login" class="card-custom p-4 p-md-5 mx-auto text-center" style="max-width: 500px;">
-                <div class="mb-3 text-success fs-1"><i class="bi bi-gear-fill"></i></div>
+                <!-- Logo en Login Admin -->
+                <div class="mb-3">
+                    <img src="img/logo.png" alt="Logo" width="70" height="70" class="rounded-circle bg-white shadow p-1 border" onerror="this.src='https://images.unsplash.com/photo-1532375810709-75b1da00537c?q=80&w=100&auto=format&fit=crop'">
+                </div>
                 <h2 class="text-title-green h3 mb-3">Acceso Administrativo por Zona</h2>
                 <p class="text-muted mb-4">Seleccione su zona e introduzca su contraseña de administrador.</p>
                 
@@ -253,18 +263,22 @@
             <!-- Dashboard de Zona -->
             <div id="admin-dashboard" class="d-none">
                 <div class="card-custom p-4 mb-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-                    <div>
-                        <h2 class="text-title-green h3 mb-1" id="titulo-zona-admin"><i class="bi bi-speedometer2 me-2"></i>Panel de Zona</h2>
-                        <p class="text-muted mb-0 small">Visualización y control de registros por iglesia.</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="img/logo.png" alt="Logo" width="50" height="50" class="rounded-circle bg-white shadow-sm p-1 border d-none d-sm-block" onerror="this.style.display='none'">
+                        <div>
+                            <h2 class="text-title-green h3 mb-1" id="titulo-zona-admin"><i class="bi bi-speedometer2 me-2"></i>Panel de Zona</h2>
+                            <p class="text-muted mb-0 small">Visualización y control de registros por iglesia.</p>
+                        </div>
                     </div>
-                    <div class="d-flex flex-wrap gap-2">
-                        <button onclick="descargarExcelMasterZona()" class="btn btn-success btn-animated fw-bold btn-sm">
-                            <i class="bi bi-file-earmark-excel-fill me-1"></i> Excel Master Edades (Zona)
+                    <!-- Botones responsivos con flex-wrap para evitar desborde en móviles -->
+                    <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-end w-100 w-md-auto">
+                        <button onclick="descargarExcelMasterZona()" class="btn btn-success btn-animated fw-bold btn-sm flex-fill flex-md-grow-0">
+                            <i class="bi bi-file-earmark-excel-fill me-1"></i> Excel Master (Zona)
                         </button>
-                        <button onclick="descargarPDFMasterZona()" class="btn btn-danger btn-animated fw-bold btn-sm">
-                            <i class="bi bi-file-earmark-pdf-fill me-1"></i> PDF Master Edades (Zona)
+                        <button onclick="descargarPDFMasterZona()" class="btn btn-danger btn-animated fw-bold btn-sm flex-fill flex-md-grow-0">
+                            <i class="bi bi-file-earmark-pdf-fill me-1"></i> PDF Master (Zona)
                         </button>
-                        <button onclick="cerrarSesion()" class="btn btn-secondary btn-animated fw-bold btn-sm">
+                        <button onclick="cerrarSesion()" class="btn btn-secondary btn-animated fw-bold btn-sm flex-fill flex-md-grow-0">
                             <i class="bi bi-box-arrow-left me-1"></i> Salir
                         </button>
                     </div>
@@ -289,8 +303,9 @@
             </div>
         </section>
 
-        <!-- ================= VISTA 3: DETALLE DE IGLESIA (CON ZONA EXCLUSIVA DE EDICIÓN/ELIMINACIÓN) ================= -->
+        <!-- ================= VISTA 3: DETALLE DE IGLESIA ================= -->
         <section id="vista-detalle" class="card-custom p-4 p-md-5 d-none">
+            <!-- Botones responsivos para prevenir desborde -->
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                 <button onclick="volverAlAdmin()" class="btn btn-secondary btn-animated fw-bold">
                     <i class="bi bi-arrow-left me-1"></i> Volver al Panel
@@ -307,14 +322,14 @@
 
             <!-- ZONA EXCLUSIVA DE GESTIÓN Y DETALLE DE LA IGLESIA -->
             <div class="card border-success shadow-sm mb-4">
-                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <h5 class="mb-0 fw-bold"><i class="bi bi-tools me-2"></i>Zona Exclusiva de Administración de Iglesia</h5>
                     <div class="d-flex gap-2">
                         <button onclick="abrirModalEdicionIglesia()" class="btn btn-warning btn-sm fw-bold text-dark btn-animated">
                             <i class="bi bi-pencil-square me-1"></i> Editar Datos
                         </button>
                         <button onclick="eliminarIglesia()" class="btn btn-dark btn-sm fw-bold text-danger btn-animated border border-danger">
-                            <i class="bi bi-trash3-fill me-1"></i> Eliminar Registro
+                            <i class="bi bi-trash3-fill me-1"></i> Eliminar
                         </button>
                     </div>
                 </div>
@@ -379,20 +394,39 @@
         let iglesiaSeleccionada = null;
         let datosIglesiasZona = [];
 
+        // Variable global para almacenar el logo en Base64 e insertarlo en los PDFs automáticamente
+        let logoBase64 = null;
+
+        // Función auxiliar para cargar el logo institucional en Base64 para jsPDF
+        function cargarLogoBase64() {
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.src = 'img/logo.png';
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                logoBase64 = canvas.toDataURL('image/png');
+            };
+        }
+        window.addEventListener('DOMContentLoaded', cargarLogoBase64);
+
         function cambiarVista(vista) {
             document.getElementById('vista-form').classList.add('d-none');
             document.getElementById('vista-admin').classList.add('d-none');
             document.getElementById('vista-detalle').classList.add('d-none');
             
-            document.getElementById('btn-form').className = "btn btn-outline-light btn-animated fw-bold opacity-75";
-            document.getElementById('btn-admin').className = "btn btn-outline-light btn-animated fw-bold opacity-75";
+            document.getElementById('btn-form').className = "btn btn-outline-light btn-animated fw-bold opacity-75 flex-fill flex-lg-grow-0 text-truncate";
+            document.getElementById('btn-admin').className = "btn btn-outline-light btn-animated fw-bold opacity-75 flex-fill flex-lg-grow-0 text-truncate";
 
             if(vista === 'form') {
                 document.getElementById('vista-form').classList.remove('d-none');
-                document.getElementById('btn-form').className = "btn btn-success btn-animated fw-bold";
+                document.getElementById('btn-form').className = "btn btn-success btn-animated fw-bold flex-fill flex-lg-grow-0 text-truncate";
             } else if(vista === 'admin') {
                 document.getElementById('vista-admin').classList.remove('d-none');
-                document.getElementById('btn-admin').className = "btn btn-success btn-animated fw-bold";
+                document.getElementById('btn-admin').className = "btn btn-success btn-animated fw-bold flex-fill flex-lg-grow-0 text-truncate";
             }
         }
 
@@ -626,7 +660,10 @@
             }
 
             document.getElementById('detalle-contenido-iglesia').innerHTML = `
-                <h3 class="h4 fw-bold text-success mb-3">${iglesiaSeleccionada.nombre_iglesia}</h3>
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <img src="img/logo.png" alt="Logo" width="45" height="45" class="rounded-circle bg-white p-1 border shadow-sm" onerror="this.style.display='none'">
+                    <h3 class="h4 fw-bold text-success mb-0">${iglesiaSeleccionada.nombre_iglesia}</h3>
+                </div>
                 <div class="row g-2 text-secondary small mb-4">
                     <div class="col-md-6"><i class="bi bi-person-fill text-success me-1"></i><strong>Pastor:</strong> ${iglesiaSeleccionada.nombre_pastor}</div>
                     <div class="col-md-6"><i class="bi bi-geo-alt-fill text-success me-1"></i><strong>Domicilio:</strong> ${iglesiaSeleccionada.domicilio}</div>
@@ -735,7 +772,7 @@
             }
         }
 
-        // DESCARGAR EXCEL MASTER ZONA (CON EDADES AGRUPADAS EXACTO A IMAGEN 1)
+        // DESCARGAR EXCEL MASTER ZONA
         function descargarExcelMasterZona() {
             let wb = XLSX.utils.book_new();
 
@@ -793,13 +830,22 @@
             XLSX.writeFile(wb, `Master_Zona_${zonaActualId}_Edades.xlsx`);
         }
 
-        // DESCARGAR PDF MASTER ZONA (ESTILO IMAGEN 1)
+        // DESCARGAR PDF MASTER ZONA (CON LOGO INSTITUCIONAL)
         function descargarPDFMasterZona() {
             const { jsPDF } = window.jspdf;
             let doc = new jsPDF();
 
-            doc.setFontSize(14);
-            doc.text("CONSOLIDADO MASTER DE NIÑOS POR ZONA (EDADES)", 14, 15);
+            // Agregar logo institucional si está disponible
+            let startY = 22;
+            if (logoBase64) {
+                doc.addImage(logoBase64, 'PNG', 14, 10, 16, 16);
+                doc.setFontSize(14);
+                doc.text("CONSOLIDADO MASTER DE NIÑOS POR ZONA (EDADES)", 34, 20);
+                startY = 32;
+            } else {
+                doc.setFontSize(14);
+                doc.text("CONSOLIDADO MASTER DE NIÑOS POR ZONA (EDADES)", 14, 15);
+            }
 
             let ninas24 = [], ninos24 = [];
             let ninas59 = [], ninos59 = [];
@@ -838,7 +884,7 @@
             }
 
             doc.autoTable({
-                startY: 22,
+                startY: startY,
                 head: [['#', 'NIÑAS', 'NIÑOS']],
                 body: rows,
                 theme: 'grid',
@@ -889,17 +935,29 @@
             XLSX.writeFile(wb, `${iglesiaSeleccionada.nombre_iglesia}_concentrado.xlsx`);
         }
 
+        // DESCARGAR PDF IGLESIA (CON LOGO INSTITUCIONAL)
         function descargarPDFIglesia() {
             if(!iglesiaSeleccionada) return;
             const { jsPDF } = window.jspdf;
             let doc = new jsPDF();
 
-            doc.setFontSize(14);
-            doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 14, 15);
-            doc.setFontSize(10);
-            doc.text(`Iglesia: ${iglesiaSeleccionada.nombre_iglesia}`, 14, 23);
-            doc.text(`Pastor: ${iglesiaSeleccionada.nombre_pastor}`, 14, 29);
-            doc.text(`Municipio: ${iglesiaSeleccionada.municipio_estado}`, 14, 35);
+            let startY = 42;
+            if (logoBase64) {
+                doc.addImage(logoBase64, 'PNG', 14, 10, 16, 16);
+                doc.setFontSize(14);
+                doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 34, 17);
+                doc.setFontSize(10);
+                doc.text(`Iglesia: ${iglesiaSeleccionada.nombre_iglesia}`, 34, 23);
+                doc.text(`Pastor: ${iglesiaSeleccionada.nombre_pastor} | Municipio: ${iglesiaSeleccionada.municipio_estado}`, 34, 29);
+                startY = 36;
+            } else {
+                doc.setFontSize(14);
+                doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 14, 15);
+                doc.setFontSize(10);
+                doc.text(`Iglesia: ${iglesiaSeleccionada.nombre_iglesia}`, 14, 23);
+                doc.text(`Pastor: ${iglesiaSeleccionada.nombre_pastor}`, 14, 29);
+                doc.text(`Municipio: ${iglesiaSeleccionada.municipio_estado}`, 14, 35);
+            }
 
             let ninas24 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '2-4');
             let ninos24 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '2-4');
@@ -923,7 +981,7 @@
             }
 
             doc.autoTable({
-                startY: 42,
+                startY: startY,
                 head: [['#', 'Niñas 2-4', 'Niños 2-4', 'Niñas 5-9', 'Niños 5-9', 'Niñas 10-14', 'Niños 10-14']],
                 body: rows,
                 theme: 'grid',
