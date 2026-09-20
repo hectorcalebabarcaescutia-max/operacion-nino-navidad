@@ -16,7 +16,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
-        /* Fondo rojo metálico elegante y texturas */
         body {
             background: linear-gradient(135deg, #7a0010 0%, #b3001b 50%, #52000a 100%);
             background-attachment: fixed;
@@ -25,22 +24,19 @@
             min-height: 100vh;
         }
 
-        /* Tarjetas y contenedores con estilo limpio y contraste */
         .card-custom {
             background-color: rgba(255, 255, 255, 0.95);
             color: #212529;
             border-radius: 1rem;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            border: 2px solid #198754; /* Detalles en verde */
+            border: 2px solid #198754;
         }
 
-        /* Navbar personalizado */
         .navbar-custom {
             background-color: #400005 !important;
             border-bottom: 3px solid #198754;
         }
 
-        /* Botones con movimiento y transiciones suaves */
         .btn-animated {
             transition: all 0.2s ease-in-out;
             transform: scale(1);
@@ -53,22 +49,31 @@
             transform: scale(0.97);
         }
 
-        /* Estilo para los títulos */
         .text-title-green {
             color: #198754;
             font-weight: 700;
         }
 
-        /* Carrusel responsivo */
         .carousel-item img {
             height: 220px;
             object-fit: cover;
             border-radius: 0.75rem;
         }
+
+        /* Estilos destacados para los logos grandes */
+        .logo-inicio {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+        }
+        .logo-admin {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
     </style>
 </head>
 <script>
-    // CREDENCIALES DE SUPABASE
     const SUPABASE_URL = 'https://otfskfmenzjtceuwcicv.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90ZnNrZm1lbnpqdGNldXdjaWN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTEyNzgsImV4cCI6MjEwNTM4NzI3OH0.zgUYxWhKMu_KfXazJ-XrkpfwImClLBmsIW3lAMlbiIE';
     const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -78,16 +83,15 @@
     <!-- NAVEGACIÓN / HEADER -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-lg sticky-top">
         <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-                <!-- Logo más grande en el inicio -->
-                <img src="img/logo.jpg" alt="Logo" width="55" height="55" class="rounded-circle bg-white p-1 shadow-sm" onerror="this.style.display='none'">
-                <span class="fw-bold text-white fs-5">🎁 Samaritan's Purse</span>
+            <a class="navbar-brand d-flex align-items-center gap-3" href="#">
+                <!-- Logo grande y visible en la barra de navegación -->
+                <img src="img/logo.jpg" alt="Logo" class="rounded-circle bg-white p-1 shadow logo-inicio" onerror="this.style.display='none'">
+                <span class="fw-bold text-white fs-4">🎁 Samaritan's Purse</span>
             </a>
             <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <!-- Corrección de desborde de botones en móvil usando w-100 y flex-column -->
                 <div class="d-flex flex-column flex-lg-row gap-2 mt-3 mt-lg-0 w-100 w-lg-auto">
                     <button onclick="cambiarVista('form')" id="btn-form" class="btn btn-success btn-animated fw-bold w-100 w-lg-auto">
                         <i class="bi bi-journal-plus me-1"></i> Registrar Iglesia
@@ -103,7 +107,7 @@
     <!-- CONTENEDOR PRINCIPAL -->
     <main class="container py-4">
 
-        <!-- CARRUSEL DE IMÁGENES -->
+        <!-- CARRUSEL -->
         <div id="carouselExampleIndicators" class="carousel slide mb-4 shadow-lg rounded-4 overflow-hidden" data-bs-ride="carousel">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></button>
@@ -133,7 +137,7 @@
             </button>
         </div>
 
-        <!-- ================= VISTA 1: FORMULARIO DE REGISTRO ================= -->
+        <!-- ================= VISTA 1: FORMULARIO ================= -->
         <section id="vista-form" class="card-custom p-4 p-md-5">
             <h2 class="text-title-green mb-2"><i class="bi bi-clipboard2-plus-fill me-2"></i>Concentrado General de Niños por Iglesia</h2>
             <p class="text-muted mb-4">Complete la información general y registre los nombres de los niños separados por edades.</p>
@@ -230,9 +234,9 @@
         <section id="vista-admin" class="d-none">
             <!-- Login por Zona -->
             <div id="admin-login" class="card-custom p-4 p-md-5 mx-auto text-center" style="max-width: 500px;">
-                <!-- Logo tamaño mediano en el login de Admin -->
-                <div class="mb-3">
-                    <img src="img/logo.jpg" alt="Logo Admin" width="85" height="85" class="rounded-circle shadow p-1 bg-white border border-success" onerror="this.style.display='none'">
+                <!-- Logo grande y visible en el login de administrador -->
+                <div class="mb-4">
+                    <img src="img/logo.jpg" alt="Logo Admin" class="rounded-circle shadow-lg p-1 bg-white border border-success logo-admin" onerror="this.style.display='none'">
                 </div>
                 <h2 class="text-title-green h3 mb-3">Acceso Administrativo por Zona</h2>
                 <p class="text-muted mb-4">Seleccione su zona e introduzca su contraseña de administrador.</p>
@@ -259,14 +263,12 @@
             <div id="admin-dashboard" class="d-none">
                 <div class="card-custom p-4 mb-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
                     <div class="d-flex align-items-center gap-3">
-                        <!-- Logo mediano en el Dashboard de Admin -->
-                        <img src="img/logo.jpg" alt="Logo Zona" width="70" height="70" class="rounded-circle shadow-sm bg-white p-1 d-none d-sm-block" onerror="this.style.display='none'">
+                        <img src="img/logo.jpg" alt="Logo Zona" class="rounded-circle shadow bg-white p-1 d-none d-sm-block logo-inicio" onerror="this.style.display='none'">
                         <div>
                             <h2 class="text-title-green h3 mb-1" id="titulo-zona-admin"><i class="bi bi-speedometer2 me-2"></i>Panel de Zona</h2>
                             <p class="text-muted mb-0 small">Visualización y control de registros por iglesia.</p>
                         </div>
                     </div>
-                    <!-- Botones adaptables para evitar desborde en móvil -->
                     <div class="d-flex flex-column flex-sm-row flex-wrap gap-2 w-100 w-md-auto">
                         <button onclick="descargarExcelMasterZona()" class="btn btn-success btn-animated fw-bold btn-sm">
                             <i class="bi bi-file-earmark-excel-fill me-1"></i> Excel Master (Zona)
@@ -280,10 +282,8 @@
                     </div>
                 </div>
 
-                <!-- Resumen de Totales Generales -->
                 <div class="row g-3 mb-4" id="tarjetas-totales"></div>
 
-                <!-- Buscador en el Admin -->
                 <div class="card-custom p-3 mb-4">
                     <div class="input-group">
                         <span class="input-group-text bg-success text-white"><i class="bi bi-search"></i></span>
@@ -291,7 +291,6 @@
                     </div>
                 </div>
 
-                <!-- Catálogo de Iglesias -->
                 <div class="card-custom p-4">
                     <h3 class="text-title-green h5 mb-3"><i class="bi bi-shop me-2"></i>Iglesias Registradas en la Zona</h3>
                     <div id="lista-iglesias-catalogo" class="row g-3"></div>
@@ -315,7 +314,6 @@
                 </div>
             </div>
 
-            <!-- ZONA EXCLUSIVA DE GESTIÓN Y DETALLE DE LA IGLESIA -->
             <div class="card border-success shadow-sm mb-4">
                 <div class="card-header bg-success text-white d-flex justify-content-between align-items-center flex-wrap gap-2">
                     <h5 class="mb-0 fw-bold"><i class="bi bi-tools me-2"></i>Zona Exclusiva de Administración de Iglesia</h5>
@@ -334,7 +332,7 @@
 
     </main>
 
-    <!-- MODAL DE EDICIÓN DE IGLESIA -->
+    <!-- MODAL DE EDICIÓN -->
     <div class="modal fade" id="modalEditarIglesia" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content card-custom p-3">
@@ -389,7 +387,7 @@
         let iglesiaSeleccionada = null;
         let datosIglesiasZona = [];
 
-        // Función auxiliar para convertir imagen local a Base64 para incluirla en los PDFs
+        // Función robusta para cargar la imagen asegurando compatibilidad en PDF
         function obtenerLogoBase64() {
             return new Promise((resolve) => {
                 const img = new Image();
@@ -404,7 +402,7 @@
                     resolve(canvas.toDataURL('image/jpeg'));
                 };
                 img.onerror = function () {
-                    resolve(null); // Si falla, retorna null y el PDF continúa sin imagen
+                    resolve(null);
                 };
             });
         }
@@ -638,6 +636,10 @@
             let ninas1014 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '10-14');
             let ninos1014 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '10-14');
 
+            let totalNinas = ninas24.length + ninas59.length + ninas1014.length;
+            let totalNinos = ninos24.length + ninos59.length + ninos1014.length;
+            let totalGlobal = totalNinas + totalNinos;
+
             let maxLen = Math.max(ninas24.length, ninos24.length, ninas59.length, ninos59.length, ninas1014.length, ninos1014.length, 1);
 
             let htmlTablaNombres = '';
@@ -657,13 +659,22 @@
 
             document.getElementById('detalle-contenido-iglesia').innerHTML = `
                 <h3 class="h4 fw-bold text-success mb-3">${iglesiaSeleccionada.nombre_iglesia}</h3>
-                <div class="row g-2 text-secondary small mb-4">
+                <div class="row g-2 text-secondary small mb-3">
                     <div class="col-md-6"><i class="bi bi-person-fill text-success me-1"></i><strong>Pastor:</strong> ${iglesiaSeleccionada.nombre_pastor}</div>
                     <div class="col-md-6"><i class="bi bi-geo-alt-fill text-success me-1"></i><strong>Domicilio:</strong> ${iglesiaSeleccionada.domicilio}</div>
                     <div class="col-md-6"><i class="bi bi-telephone-fill text-success me-1"></i><strong>Teléfono:</strong> ${iglesiaSeleccionada.telefono}</div>
                     <div class="col-md-6"><i class="bi bi-pin-map-fill text-success me-1"></i><strong>Municipio/Estado:</strong> ${iglesiaSeleccionada.municipio_estado}</div>
                     <div class="col-md-6"><i class="bi bi-calendar-event text-success me-1"></i><strong>Fecha de entrega:</strong> ${iglesiaSeleccionada.fecha_entrega}</div>
                 </div>
+                
+                <!-- Conteo específico visible en pantalla -->
+                <div class="alert alert-success py-2 px-3 mb-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <span><strong>Conteo Específico:</strong></span>
+                    <span>👧 Niñas: <strong>${totalNinas}</strong> (2-4: ${ninas24.length}, 5-9: ${ninas59.length}, 10-14: ${ninas1014.length})</span>
+                    <span>👦 Niños: <strong>${totalNinos}</strong> (2-4: ${ninos24.length}, 5-9: ${ninos59.length}, 10-14: ${ninos1014.length})</span>
+                    <span>🎁 Total: <strong>${totalGlobal}</strong></span>
+                </div>
+
                 <hr class="my-3">
                 <h4 class="h6 fw-bold text-dark mb-2"><i class="bi bi-list-columns-reverse text-success me-1"></i> Listado Nominal por Edades</h4>
                 <div class="table-responsive">
@@ -748,7 +759,7 @@
 
         async function eliminarIglesia() {
             if(!iglesiaSeleccionada) return;
-            if(!confirm(`¿Está totalmente seguro de eliminar la iglesia "${iglesiaSeleccionada.nombre_iglesia}" y todos sus niños registrados? Esta acción no se puede deshacer.`)) {
+            if(!confirm(`¿Está totalmente seguro de eliminar la iglesia "${iglesiaSeleccionada.nombre_iglesia}" y todos sus niños registrados?`)) {
                 return;
             }
 
@@ -765,10 +776,8 @@
             }
         }
 
-        // DESCARGAR EXCEL MASTER ZONA
         function descargarExcelMasterZona() {
             let wb = XLSX.utils.book_new();
-
             let ninas24 = [], ninos24 = [];
             let ninas59 = [], ninos59 = [];
             let ninas1014 = [], ninos1014 = [];
@@ -791,31 +800,19 @@
 
             let max24 = Math.max(ninas24.length, ninos24.length, 1);
             for(let i=0; i<max24; i++) {
-                wsData.push([
-                    i+1,
-                    ninas24[i] || "",
-                    ninos24[i] || ""
-                ]);
+                wsData.push([i+1, ninas24[i] || "", ninos24[i] || ""]);
             }
 
             wsData.push(["5 - 9 AÑOS", "", ""]);
             let max59 = Math.max(ninas59.length, ninos59.length, 1);
             for(let i=0; i<max59; i++) {
-                wsData.push([
-                    max24 + i + 1,
-                    ninas59[i] || "",
-                    ninos59[i] || ""
-                ]);
+                wsData.push([max24 + i + 1, ninas59[i] || "", ninos59[i] || ""]);
             }
 
             wsData.push(["10 - 14 AÑOS", "", ""]);
             let max1014 = Math.max(ninas1014.length, ninos1014.length, 1);
             for(let i=0; i<max1014; i++) {
-                wsData.push([
-                    max24 + max59 + i + 1,
-                    ninas1014[i] || "",
-                    ninos1014[i] || ""
-                ]);
+                wsData.push([max24 + max59 + i + 1, ninas1014[i] || "", ninos1014[i] || ""]);
             }
 
             let ws = XLSX.utils.aoa_to_sheet(wsData);
@@ -823,20 +820,17 @@
             XLSX.writeFile(wb, `Master_Zona_${zonaActualId}_Edades.xlsx`);
         }
 
-        // DESCARGAR PDF MASTER ZONA (CON LOGO img/logo.jpg)
         async function descargarPDFMasterZona() {
             const { jsPDF } = window.jspdf;
             let doc = new jsPDF();
-
             let logoBase64 = await obtenerLogoBase64();
             let startY = 22;
 
             if (logoBase64) {
-                // Inserta el logo en la esquina superior izquierda del PDF (ancho 16, alto 16)
-                doc.addImage(logoBase64, 'JPEG', 14, 10, 16, 16);
+                doc.addImage(logoBase64, 'JPEG', 14, 10, 18, 18);
                 doc.setFontSize(14);
-                doc.text("CONSOLIDADO MASTER DE NIÑOS POR ZONA (EDADES)", 34, 18);
-                startY = 32;
+                doc.text("CONSOLIDADO MASTER DE NIÑOS POR ZONA (EDADES)", 36, 18);
+                startY = 34;
             } else {
                 doc.setFontSize(14);
                 doc.text("CONSOLIDADO MASTER DE NIÑOS POR ZONA (EDADES)", 14, 15);
@@ -857,6 +851,13 @@
                     if (n.genero === 'niño' && n.rango_edad === '10-14') ninos1014.push(n.nombre_completo);
                 });
             });
+
+            let totalNinasZona = ninas24.length + ninas59.length + ninas1014.length;
+            let totalNinosZona = ninos24.length + ninos59.length + ninos1014.length;
+
+            doc.setFontSize(10);
+            doc.text(`Conteo Específico Zona -> Niñas: ${totalNinasZona} | Niños: ${totalNinosZona} | Total General: ${totalNinasZona + totalNinosZona}`, 14, startY);
+            startY += 6;
 
             let rows = [];
             let contador = 1;
@@ -931,32 +932,29 @@
             XLSX.writeFile(wb, `${iglesiaSeleccionada.nombre_iglesia}_concentrado.xlsx`);
         }
 
-        // DESCARGAR PDF IGLESIA (CON LOGO img/logo.jpg)
+        // DESCARGAR PDF IGLESIA (CON LOGO Y CONTEO ESPECÍFICO)
         async function descargarPDFIglesia() {
             if(!iglesiaSeleccionada) return;
             const { jsPDF } = window.jspdf;
             let doc = new jsPDF();
-
             let logoBase64 = await obtenerLogoBase64();
-            let startY = 42;
+            let startY = 46;
 
             if (logoBase64) {
-                // Inserta el logo en la parte superior izquierda
-                doc.addImage(logoBase64, 'JPEG', 14, 10, 16, 16);
+                doc.addImage(logoBase64, 'JPEG', 14, 10, 18, 18);
                 doc.setFontSize(14);
-                doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 34, 18);
+                doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 36, 17);
                 doc.setFontSize(9);
-                doc.text(`Iglesia: ${iglesiaSeleccionada.nombre_iglesia}`, 34, 25);
-                doc.text(`Pastor: ${iglesiaSeleccionada.nombre_pastor} | Municipio: ${iglesiaSeleccionada.municipio_estado}`, 34, 31);
+                doc.text(`Iglesia: ${iglesiaSeleccionada.nombre_iglesia} | Pastor: ${iglesiaSeleccionada.nombre_pastor}`, 36, 24);
+                doc.text(`Municipio: ${iglesiaSeleccionada.municipio_estado} | Entrega: ${iglesiaSeleccionada.fecha_entrega}`, 36, 30);
                 startY = 38;
             } else {
                 doc.setFontSize(14);
                 doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 14, 15);
                 doc.setFontSize(10);
-                doc.text(`Iglesia: ${iglesiaSeleccionada.nombre_iglesia}`, 14, 23);
-                doc.text(`Pastor: ${iglesiaSeleccionada.nombre_pastor}`, 14, 29);
-                doc.text(`Municipio: ${iglesiaSeleccionada.municipio_estado}`, 14, 35);
-                startY = 42;
+                doc.text(`Iglesia: ${iglesiaSeleccionada.nombre_iglesia}`, 14, 22);
+                doc.text(`Pastor: ${iglesiaSeleccionada.nombre_pastor} | Municipio: ${iglesiaSeleccionada.municipio_estado}`, 14, 28);
+                startY = 36;
             }
 
             let ninas24 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '2-4');
@@ -965,8 +963,17 @@
             let ninos59 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '5-9');
             let ninas1014 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '10-14');
             let ninos1014 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '10-14');
-            let maxLen = Math.max(ninas24.length, ninos24.length, ninas59.length, ninos59.length, ninas1014.length, ninos1014.length, 1);
 
+            let totalNinas = ninas24.length + ninas59.length + ninas1014.length;
+            let totalNinos = ninos24.length + ninos59.length + ninos1014.length;
+
+            // Inserción del conteo específico detallado en la cabecera del PDF
+            doc.setFontSize(9);
+            doc.setTextColor(40, 40, 40);
+            doc.text(`Conteo Específico -> Niñas: ${totalNinas} (2-4: ${ninas24.length}, 5-9: ${ninas59.length}, 10-14: ${ninas1014.length}) | Niños: ${totalNinos} (2-4: ${ninos24.length}, 5-9: ${ninos59.length}, 10-14: ${ninos1014.length}) | Total: ${totalNinas + totalNinos}`, 14, startY);
+            startY += 6;
+
+            let maxLen = Math.max(ninas24.length, ninos24.length, ninas59.length, ninos59.length, ninas1014.length, ninos1014.length, 1);
             let rows = [];
             for(let i=0; i<maxLen; i++) {
                 rows.push([
