@@ -60,7 +60,6 @@
             border-radius: 0.75rem;
         }
 
-        /* Estilos destacados para los logos grandes */
         .logo-inicio {
             width: 70px;
             height: 70px;
@@ -84,7 +83,6 @@
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-lg sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-3" href="#">
-                <!-- Logo grande y visible en la barra de navegación -->
                 <img src="img/logo.jpg" alt="Logo" class="rounded-circle bg-white p-1 shadow logo-inicio" onerror="this.style.display='none'">
                 <span class="fw-bold text-white fs-4">🎁 Samaritan's Purse</span>
             </a>
@@ -234,7 +232,6 @@
         <section id="vista-admin" class="d-none">
             <!-- Login por Zona -->
             <div id="admin-login" class="card-custom p-4 p-md-5 mx-auto text-center" style="max-width: 500px;">
-                <!-- Logo grande y visible en el login de administrador -->
                 <div class="mb-4">
                     <img src="img/logo.jpg" alt="Logo Admin" class="rounded-circle shadow-lg p-1 bg-white border border-success logo-admin" onerror="this.style.display='none'">
                 </div>
@@ -309,7 +306,7 @@
                         <i class="bi bi-file-earmark-excel-fill me-1"></i> Excel Iglesia
                     </button>
                     <button onclick="descargarPDFIglesia()" class="btn btn-danger btn-animated fw-bold btn-sm">
-                        <i class="bi bi-file-earmark-pdf-fill me-1"></i> PDF Iglesia
+                        <i class="bi bi-file-earmark-pdf-fill me-1"></i> PDF Iglesia (Formato Oficial)
                     </button>
                 </div>
             </div>
@@ -657,41 +654,74 @@
             }
 
             document.getElementById('detalle-contenido-iglesia').innerHTML = `
-                <h3 class="h4 fw-bold text-success mb-3">${iglesiaSeleccionada.nombre_iglesia}</h3>
-                <div class="row g-2 text-secondary small mb-3">
-                    <div class="col-md-6"><i class="bi bi-person-fill text-success me-1"></i><strong>Pastor:</strong> ${iglesiaSeleccionada.nombre_pastor}</div>
-                    <div class="col-md-6"><i class="bi bi-geo-alt-fill text-success me-1"></i><strong>Domicilio:</strong> ${iglesiaSeleccionada.domicilio}</div>
-                    <div class="col-md-6"><i class="bi bi-telephone-fill text-success me-1"></i><strong>Teléfono:</strong> ${iglesiaSeleccionada.telefono}</div>
-                    <div class="col-md-6"><i class="bi bi-pin-map-fill text-success me-1"></i><strong>Municipio/Estado:</strong> ${iglesiaSeleccionada.municipio_estado}</div>
-                    <div class="col-md-6"><i class="bi bi-calendar-event text-success me-1"></i><strong>Fecha de entrega:</strong> ${iglesiaSeleccionada.fecha_entrega}</div>
-                </div>
-                
-                <div class="alert alert-success py-2 px-3 mb-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
-                    <span><strong>Conteo Específico:</strong></span>
-                    <span>👧 Niñas: <strong>${totalNinas}</strong> (2-4: ${ninas24.length}, 5-9: ${ninas59.length}, 10-14: ${ninas1014.length})</span>
-                    <span>👦 Niños: <strong>${totalNinos}</strong> (2-4: ${ninos24.length}, 5-9: ${ninos59.length}, 10-14: ${ninos1014.length})</span>
-                    <span>🎁 Total: <strong>${totalGlobal}</strong></span>
-                </div>
+                <div class="border p-3 bg-white rounded shadow-sm">
+                    <div class="row border-bottom pb-2 mb-2">
+                        <div class="col-12"><strong class="text-dark">NOMBRE DE LA IGLESIA:</strong> <span class="text-success fw-bold">${iglesiaSeleccionada.nombre_iglesia}</span></div>
+                        <div class="col-md-6"><strong class="text-dark">NOMBRE DEL PASTOR:</strong> ${iglesiaSeleccionada.nombre_pastor}</div>
+                        <div class="col-md-6"><strong class="text-dark">DOMICILIO:</strong> ${iglesiaSeleccionada.domicilio}</div>
+                        <div class="col-md-6"><strong class="text-dark">NO. TELÉFONO Y CELULAR:</strong> ${iglesiaSeleccionada.telefono}</div>
+                        <div class="col-md-6"><strong class="text-dark">MUNICIPIO, ESTADO:</strong> ${iglesiaSeleccionada.municipio_estado}</div>
+                        <div class="col-12"><strong class="text-dark">FECHA DE ENTREGA DE LA LISTA:</strong> ${iglesiaSeleccionada.fecha_entrega}</div>
+                    </div>
 
-                <hr class="my-3">
-                <h4 class="h6 fw-bold text-dark mb-2"><i class="bi bi-list-columns-reverse text-success me-1"></i> Listado Nominal por Edades</h4>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-sm text-xs bg-white">
-                        <thead class="table-success text-dark">
-                            <tr>
-                                <th class="text-center">#</th>
-                                <th><i class="bi bi-gender-female"></i> 👧 Niñas (2-4)</th>
-                                <th><i class="bi bi-gender-male"></i> 👦 Niños (2-4)</th>
-                                <th><i class="bi bi-gender-female"></i> 👧 Niñas (5-9)</th>
-                                <th><i class="bi bi-gender-male"></i> 👦 Niños (5-9)</th>
-                                <th><i class="bi bi-gender-female"></i> 👧 Niñas (10-14)</th>
-                                <th><i class="bi bi-gender-male"></i> 👦 Niños (10-14)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${htmlTablaNombres}
-                        </tbody>
-                    </table>
+                    <div class="table-responsive mb-3">
+                        <table class="table table-bordered table-sm text-center align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th rowspan="2" class="align-middle">EDADES<br>NIÑAS (OS)</th>
+                                    <th>2-4</th>
+                                    <th>5-9</th>
+                                    <th>10-14</th>
+                                    <th>TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold text-start ps-3">NIÑAS</td>
+                                    <td>${ninas24.length}</td>
+                                    <td>${ninas59.length}</td>
+                                    <td>${ninas1014.length}</td>
+                                    <td class="fw-bold">${totalNinas}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-start ps-3">NIÑOS</td>
+                                    <td>${ninos24.length}</td>
+                                    <td>${ninos59.length}</td>
+                                    <td>${ninos1014.length}</td>
+                                    <td class="fw-bold">${totalNinos}</td>
+                                </tr>
+                                <tr class="table-light">
+                                    <td class="fw-bold text-start ps-3">TOTAL POR EDADES</td>
+                                    <td>${ninas24.length + ninos24.length}</td>
+                                    <td>${ninas59.length + ninos59.length}</td>
+                                    <td>${ninas1014.length + ninos1014.length}</td>
+                                    <td class="fw-bold">${totalGlobal}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="p-2 bg-light border fw-bold text-end">TOTAL GENERAL: ${totalGlobal}</div>
+                    </div>
+
+                    <hr class="my-3">
+                    <h4 class="h6 fw-bold text-dark mb-2">LISTADO NOMINAL DE NIÑOS PARTICIPANTES</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-sm text-xs bg-white">
+                            <thead class="table-success text-dark">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th>👧 Niñas (2-4)</th>
+                                    <th>👦 Niños (2-4)</th>
+                                    <th>👧 Niñas (5-9)</th>
+                                    <th>👦 Niños (5-9)</th>
+                                    <th>👧 Niñas (10-14)</th>
+                                    <th>👦 Niños (10-14)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${htmlTablaNombres}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             `;
         }
@@ -818,7 +848,150 @@
             XLSX.writeFile(wb, `Master_Zona_${zonaActualId}_Edades.xlsx`);
         }
 
-        // ================= PDF MASTER ZONA UNIFICADO (EXPEDIENTE COMPLETO DE TODAS LAS IGLESIAS) =================
+        // ================= FUNCIÓN GENERADORA DE PDF OFICIAL IDÉNTICO AL FORMATO FÍSICO =================
+        async function generarEstructuraPDFOficial(doc, iglesia, logoBase64, esNuevaPagina) {
+            if (esNuevaPagina) {
+                doc.addPage();
+            }
+
+            // 1. Cabecera con Logo y Título Institucional
+            if (logoBase64) {
+                doc.addImage(logoBase64, 'JPEG', 14, 10, 18, 18);
+            }
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(13);
+            doc.text("OPERATION CHRISTMAS CHILD", 35, 15);
+            doc.setFontSize(11);
+            doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 35, 21);
+
+            // 2. Bloque de Datos Generales (Estructura idéntica al formato impreso)
+            doc.setFontSize(9);
+            doc.setFont("helvetica", "bold");
+            doc.text("NOMBRE DE LA IGLESIA:", 14, 32);
+            doc.setFont("helvetica", "normal");
+            doc.text(iglesia.nombre_iglesia || "", 55, 32);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("NOMBRE DEL PASTOR:", 14, 38);
+            doc.setFont("helvetica", "normal");
+            doc.text(iglesia.nombre_pastor || "", 53, 38);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("DOMICILIO:", 14, 44);
+            doc.setFont("helvetica", "normal");
+            doc.text(iglesia.domicilio || "", 35, 44);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("NO. TELÉFONO Y CELULAR:", 14, 50);
+            doc.setFont("helvetica", "normal");
+            doc.text(iglesia.telefono || "", 60, 50);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("MUNICIPIO, ESTADO:", 110, 50);
+            doc.setFont("helvetica", "normal");
+            doc.text(iglesia.municipio_estado || "", 145, 50);
+
+            doc.setFont("helvetica", "bold");
+            doc.text("FECHA DE ENTREGA DE LA LISTA:", 14, 56);
+            doc.setFont("helvetica", "normal");
+            doc.text(iglesia.fecha_entrega || "", 72, 56);
+
+            // Filtrado de listas por edades
+            let ninas24 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '2-4');
+            let ninos24 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '2-4');
+            let ninas59 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '5-9');
+            let ninos59 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '5-9');
+            let ninas1014 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '10-14');
+            let ninos1014 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '10-14');
+
+            let totalNinas = ninas24.length + ninas59.length + ninas1014.length;
+            let totalNinos = ninos24.length + ninos59.length + ninos1014.length;
+            let totalGeneral = totalNinas + totalNinos;
+
+            // 3. Tabla Resumen por Edades (Idéntica al formato físico)
+            doc.autoTable({
+                startY: 61,
+                head: [
+                    [{ content: 'EDADES\nNIÑAS (OS)', styles: { halign: 'center', fillColor: [240, 240, 240] } }, '2-4', '5-9', '10-14', 'TOTAL']
+                ],
+                body: [
+                    ['NIÑAS', ninas24.length, ninas59.length, ninas1014.length, totalNinas],
+                    ['NIÑOS', ninos24.length, ninos59.length, ninos1014.length, totalNinos],
+                    ['TOTAL POR EDADES', ninas24.length + ninos24.length, ninas59.length + ninos59.length, ninas1014.length + ninos1014.length, totalGeneral]
+                ],
+                theme: 'grid',
+                styles: { fontSize: 8, cellPadding: 1.5, halign: 'center', textColor: [0, 0, 0] },
+                headStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold' },
+                columnStyles: { 0: { halign: 'left', fontStyle: 'bold' } }
+            });
+
+            let finalY = doc.lastAutoTable.finalY + 2;
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(9);
+            doc.text(`TOTAL GENERAL: ${totalGeneral}`, 14, finalY + 4);
+
+            // 4. Listado Nominal con subtítulos de edad idénticos
+            let maxLen = Math.max(ninas24.length, ninos24.length, ninas59.length, ninos59.length, ninas1014.length, ninos1014.length, 1);
+            let rowsNombres = [];
+
+            // Bloque 2-4 años
+            rowsNombres.push([{ content: '2-4 AÑOS', colSpan: 3, styles: { fillColor: [245, 245, 245], fontStyle: 'bold', halign: 'center' } }]);
+            let max24 = Math.max(ninas24.length, ninos24.length, 1);
+            for(let i=0; i<max24; i++) {
+                rowsNombres.push([
+                    ninas24[i] ? ninas24[i].nombre_completo : '',
+                    i + 1,
+                    ninos24[i] ? ninos24[i].nombre_completo : ''
+                ]);
+            }
+
+            // Bloque 5-9 años
+            rowsNombres.push([{ content: '5-9 AÑOS', colSpan: 3, styles: { fillColor: [245, 245, 245], fontStyle: 'bold', halign: 'center' } }]);
+            let max59 = Math.max(ninas59.length, ninos59.length, 1);
+            for(let i=0; i<max59; i++) {
+                rowsNombres.push([
+                    ninas59[i] ? ninas59[i].nombre_completo : '',
+                    max24 + i + 1,
+                    ninos59[i] ? ninos59[i].nombre_completo : ''
+                ]);
+            }
+
+            // Bloque 10-14 años
+            rowsNombres.push([{ content: '10-14 AÑOS', colSpan: 3, styles: { fillColor: [245, 245, 245], fontStyle: 'bold', halign: 'center' } }]);
+            let max1014 = Math.max(ninas1014.length, ninos1014.length, 1);
+            for(let i=0; i<max1014; i++) {
+                rowsNombres.push([
+                    ninas1014[i] ? ninas1014[i].nombre_completo : '',
+                    max24 + max59 + i + 1,
+                    ninos1014[i] ? ninos1014[i].nombre_completo : ''
+                ]);
+            }
+
+            doc.autoTable({
+                startY: finalY + 7,
+                head: [['NIÑAS', '#', 'NIÑOS']],
+                body: rowsNombres,
+                theme: 'grid',
+                styles: { fontSize: 8, cellPadding: 1.2, textColor: [0, 0, 0] },
+                headStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' },
+                columnStyles: { 
+                    0: { cellWidth: 85 }, 
+                    1: { cellWidth: 15, halign: 'center', fontStyle: 'bold' }, 
+                    2: { cellWidth: 85 } 
+                }
+            });
+        }
+
+        async function descargarPDFIglesia() {
+            if(!iglesiaSeleccionada) return;
+            const { jsPDF } = window.jspdf;
+            let doc = new jsPDF();
+            let logoBase64 = await obtenerLogoBase64();
+
+            await generarEstructuraPDFOficial(doc, iglesiaSeleccionada, logoBase64, false);
+            doc.save(`${iglesiaSeleccionada.nombre_iglesia}_Oficial.pdf`);
+        }
+
         async function descargarPDFMasterZona() {
             if (!datosIglesiasZona || datosIglesiasZona.length === 0) {
                 alert('No hay iglesias registradas en esta zona para exportar.');
@@ -830,74 +1003,10 @@
             let logoBase64 = await obtenerLogoBase64();
 
             for (let index = 0; index < datosIglesiasZona.length; index++) {
-                let iglesia = datosIglesiasZona[index];
-
-                // Si no es la primera iglesia, agregamos una nueva página en el mismo PDF
-                if (index > 0) {
-                    doc.addPage();
-                }
-
-                let startY = 46;
-
-                // Cabecera institucional idéntica al modelo de iglesia individual
-                if (logoBase64) {
-                    doc.addImage(logoBase64, 'JPEG', 14, 10, 18, 18);
-                    doc.setFontSize(14);
-                    doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 36, 17);
-                    doc.setFontSize(9);
-                    doc.text(`Iglesia: ${iglesia.nombre_iglesia} | Pastor: ${iglesia.nombre_pastor}`, 36, 24);
-                    doc.text(`Municipio: ${iglesia.municipio_estado} | Entrega: ${iglesia.fecha_entrega}`, 36, 30);
-                    startY = 38;
-                } else {
-                    doc.setFontSize(14);
-                    doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 14, 15);
-                    doc.setFontSize(10);
-                    doc.text(`Iglesia: ${iglesia.nombre_iglesia}`, 14, 22);
-                    doc.text(`Pastor: ${iglesia.nombre_pastor} | Municipio: ${iglesia.municipio_estado}`, 14, 28);
-                    startY = 36;
-                }
-
-                let ninas24 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '2-4');
-                let ninos24 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '2-4');
-                let ninas59 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '5-9');
-                let ninos59 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '5-9');
-                let ninas1014 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '10-14');
-                let ninos1014 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '10-14');
-
-                let totalNinas = ninas24.length + ninas59.length + ninas1014.length;
-                let totalNinos = ninos24.length + ninos59.length + ninos1014.length;
-
-                // Conteo específico detallado en la cabecera de la página de esta iglesia
-                doc.setFontSize(9);
-                doc.setTextColor(40, 40, 40);
-                doc.text(`Conteo Específico -> Niñas: ${totalNinas} (2-4: ${ninas24.length}, 5-9: ${ninas59.length}, 10-14: ${ninas1014.length}) | Niños: ${totalNinos} (2-4: ${ninos24.length}, 5-9: ${ninos59.length}, 10-14: ${ninos1014.length}) | Total: ${totalNinas + totalNinos}`, 14, startY);
-                startY += 6;
-
-                let maxLen = Math.max(ninas24.length, ninos24.length, ninas59.length, ninos59.length, ninas1014.length, ninos1014.length, 1);
-                let rows = [];
-                for(let i=0; i<maxLen; i++) {
-                    rows.push([
-                        i+1,
-                        ninas24[i] ? ninas24[i].nombre_completo : '',
-                        ninos24[i] ? ninos24[i].nombre_completo : '',
-                        ninas59[i] ? ninas59[i].nombre_completo : '',
-                        ninos59[i] ? ninos59[i].nombre_completo : '',
-                        ninas1014[i] ? ninas1014[i].nombre_completo : '',
-                        ninos1014[i] ? ninos1014[i].nombre_completo : ''
-                    ]);
-                }
-
-                doc.autoTable({
-                    startY: startY,
-                    head: [['#', 'Niñas 2-4', 'Niños 2-4', 'Niñas 5-9', 'Niños 5-9', 'Niñas 10-14', 'Niños 10-14']],
-                    body: rows,
-                    theme: 'grid',
-                    headStyles: { fillColor: [25, 135, 84] },
-                    styles: { fontSize: 8 }
-                });
+                await generarEstructuraPDFOficial(doc, datosIglesiasZona[index], logoBase64, index > 0);
             }
 
-            doc.save(`Concentrado_Master_Zona_${zonaActualId}.pdf`);
+            doc.save(`Concentrado_Master_Zona_${zonaActualId}_Oficial.pdf`);
         }
 
         function descargarExcelIglesia() {
@@ -938,71 +1047,6 @@
             let ws = XLSX.utils.aoa_to_sheet(wsData);
             XLSX.utils.book_append_sheet(wb, ws, "Concentrado Iglesia");
             XLSX.writeFile(wb, `${iglesiaSeleccionada.nombre_iglesia}_concentrado.xlsx`);
-        }
-
-        async function descargarPDFIglesia() {
-            if(!iglesiaSeleccionada) return;
-            const { jsPDF } = window.jspdf;
-            let doc = new jsPDF();
-            let logoBase64 = await obtenerLogoBase64();
-            let startY = 46;
-
-            if (logoBase64) {
-                doc.addImage(logoBase64, 'JPEG', 14, 10, 18, 18);
-                doc.setFontSize(14);
-                doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 36, 17);
-                doc.setFontSize(9);
-                doc.text(`Iglesia: ${iglesiaSeleccionada.nombre_iglesia} | Pastor: ${iglesiaSeleccionada.nombre_pastor}`, 36, 24);
-                doc.text(`Municipio: ${iglesiaSeleccionada.municipio_estado} | Entrega: ${iglesiaSeleccionada.fecha_entrega}`, 36, 30);
-                startY = 38;
-            } else {
-                doc.setFontSize(14);
-                doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 14, 15);
-                doc.setFontSize(10);
-                doc.text(`Iglesia: ${iglesiaSeleccionada.nombre_iglesia}`, 14, 22);
-                doc.text(`Pastor: ${iglesiaSeleccionada.nombre_pastor} | Municipio: ${iglesiaSeleccionada.municipio_estado}`, 14, 28);
-                startY = 36;
-            }
-
-            let ninas24 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '2-4');
-            let ninos24 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '2-4');
-            let ninas59 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '5-9');
-            let ninos59 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '5-9');
-            let ninas1014 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '10-14');
-            let ninos1014 = iglesiaSeleccionada.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '10-14');
-
-            let totalNinas = ninas24.length + ninas59.length + ninas1014.length;
-            let totalNinos = ninos24.length + ninos59.length + ninos1014.length;
-
-            doc.setFontSize(9);
-            doc.setTextColor(40, 40, 40);
-            doc.text(`Conteo Específico -> Niñas: ${totalNinas} (2-4: ${ninas24.length}, 5-9: ${ninas59.length}, 10-14: ${ninas1014.length}) | Niños: ${totalNinos} (2-4: ${ninos24.length}, 5-9: ${ninos59.length}, 10-14: ${ninos1014.length}) | Total: ${totalNinas + totalNinos}`, 14, startY);
-            startY += 6;
-
-            let maxLen = Math.max(ninas24.length, ninos24.length, ninas59.length, ninos59.length, ninas1014.length, ninos1014.length, 1);
-            let rows = [];
-            for(let i=0; i<maxLen; i++) {
-                rows.push([
-                    i+1,
-                    ninas24[i] ? ninas24[i].nombre_completo : '',
-                    ninos24[i] ? ninos24[i].nombre_completo : '',
-                    ninas59[i] ? ninas59[i].nombre_completo : '',
-                    ninos59[i] ? ninos59[i].nombre_completo : '',
-                    ninas1014[i] ? ninas1014[i].nombre_completo : '',
-                    ninos1014[i] ? ninos1014[i].nombre_completo : ''
-                ]);
-            }
-
-            doc.autoTable({
-                startY: startY,
-                head: [['#', 'Niñas 2-4', 'Niños 2-4', 'Niñas 5-9', 'Niños 5-9', 'Niñas 10-14', 'Niños 10-14']],
-                body: rows,
-                theme: 'grid',
-                headStyles: { fillColor: [25, 135, 84] },
-                styles: { fontSize: 8 }
-            });
-
-            doc.save(`${iglesiaSeleccionada.nombre_iglesia}.pdf`);
         }
     </script>
 </body>
