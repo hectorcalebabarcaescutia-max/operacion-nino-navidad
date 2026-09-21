@@ -848,55 +848,66 @@
             XLSX.writeFile(wb, `Master_Zona_${zonaActualId}_Edades.xlsx`);
         }
 
-        // ================= FUNCIÓN GENERADORA DE PDF OFICIAL IDÉNTICO AL FORMATO FÍSICO =================
+        // ================= FUNCIÓN GENERADORA DE PDF OFICIAL (RÉPLICA EXACTA 100% AL FORMATO FÍSICO) =================
         async function generarEstructuraPDFOficial(doc, iglesia, logoBase64, esNuevaPagina) {
             if (esNuevaPagina) {
                 doc.addPage();
             }
 
-            // 1. Cabecera con Logo y Título Institucional
+            // 1. Cabecera Institucional y Logo
             if (logoBase64) {
-                doc.addImage(logoBase64, 'JPEG', 14, 10, 18, 18);
+                doc.addImage(logoBase64, 'JPEG', 14, 10, 20, 20);
             }
+            
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(13);
-            doc.text("OPERATION CHRISTMAS CHILD", 35, 15);
             doc.setFontSize(11);
-            doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 35, 21);
+            doc.text("OPERATION", 38, 14);
+            doc.text("Christmas", 38, 19);
+            doc.setFontSize(8);
+            doc.text("Samaritan's Purse", 38, 23);
 
-            // 2. Bloque de Datos Generales (Estructura idéntica al formato impreso)
+            doc.setFontSize(12);
+            doc.text("CONCENTRADO GENERAL", 120, 14, { align: 'center' });
+            doc.text("DE NIÑOS POR IGLESIA", 120, 19, { align: 'center' });
+
+            // 2. Datos generales de la iglesia en formato de líneas idéntico al impreso
             doc.setFontSize(9);
-            doc.setFont("helvetica", "bold");
-            doc.text("NOMBRE DE LA IGLESIA:", 14, 32);
+            let startY = 32;
+            
+            doc.text("NOMBRE DE LA IGLESIA:", 14, startY);
             doc.setFont("helvetica", "normal");
-            doc.text(iglesia.nombre_iglesia || "", 55, 32);
-
+            doc.text(iglesia.nombre_iglesia || "", 55, startY);
             doc.setFont("helvetica", "bold");
-            doc.text("NOMBRE DEL PASTOR:", 14, 38);
-            doc.setFont("helvetica", "normal");
-            doc.text(iglesia.nombre_pastor || "", 53, 38);
 
+            startY += 6;
+            doc.text("NOMBRE DEL PASTOR:", 14, startY);
+            doc.setFont("helvetica", "normal");
+            doc.text(iglesia.nombre_pastor || "", 55, startY);
             doc.setFont("helvetica", "bold");
-            doc.text("DOMICILIO:", 14, 44);
-            doc.setFont("helvetica", "normal");
-            doc.text(iglesia.domicilio || "", 35, 44);
 
+            startY += 6;
+            doc.text("DOMICILIO:", 14, startY);
+            doc.setFont("helvetica", "normal");
+            doc.text(iglesia.domicilio || "", 35, startY);
             doc.setFont("helvetica", "bold");
-            doc.text("NO. TELÉFONO Y CELULAR:", 14, 50);
-            doc.setFont("helvetica", "normal");
-            doc.text(iglesia.telefono || "", 60, 50);
 
+            startY += 6;
+            doc.text("No. TELÉFONO Y CELULAR:", 14, startY);
+            doc.setFont("helvetica", "normal");
+            doc.text(iglesia.telefono || "", 58, startY);
             doc.setFont("helvetica", "bold");
-            doc.text("MUNICIPIO, ESTADO:", 110, 50);
-            doc.setFont("helvetica", "normal");
-            doc.text(iglesia.municipio_estado || "", 145, 50);
 
+            doc.text("MUNICIPIO, ESTADO:", 110, startY);
+            doc.setFont("helvetica", "normal");
+            doc.text(iglesia.municipio_estado || "", 145, startY);
             doc.setFont("helvetica", "bold");
-            doc.text("FECHA DE ENTREGA DE LA LISTA:", 14, 56);
-            doc.setFont("helvetica", "normal");
-            doc.text(iglesia.fecha_entrega || "", 72, 56);
 
-            // Filtrado de listas por edades
+            startY += 6;
+            doc.text("FECHA DE ENTREGA DE LA LISTA:", 14, startY);
+            doc.setFont("helvetica", "normal");
+            doc.text(iglesia.fecha_entrega || "", 70, startY);
+
+            // 3. Filtrado y conteo de datos por edades
             let ninas24 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '2-4');
             let ninos24 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '2-4');
             let ninas59 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '5-9');
@@ -904,63 +915,61 @@
             let ninas1014 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '10-14');
             let ninos1014 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '10-14');
 
-            let totalNinas = ninas24.length + ninas59.length + ninas1014.length;
-            let totalNinos = ninos24.length + ninos59.length + ninos1014.length;
-            let totalGeneral = totalNinas + totalNinos;
+            let totNinas = ninas24.length + ninas59.length + ninas1014.length;
+            let totNinos = ninos24.length + ninos59.length + ninos1014.length;
 
-            // 3. Tabla Resumen por Edades (Idéntica al formato físico)
+            startY += 6;
+
+            // 4. Tabla de Concentrado Numérico Superior
             doc.autoTable({
-                startY: 61,
-                head: [
-                    [{ content: 'EDADES\nNIÑAS (OS)', styles: { halign: 'center', fillColor: [240, 240, 240] } }, '2-4', '5-9', '10-14', 'TOTAL']
-                ],
+                startY: startY,
+                head: [['EDADES', '2-4', '5-9', '10-14', 'TOTAL']],
                 body: [
-                    ['NIÑAS', ninas24.length, ninas59.length, ninas1014.length, totalNinas],
-                    ['NIÑOS', ninos24.length, ninos59.length, ninos1014.length, totalNinos],
-                    ['TOTAL POR EDADES', ninas24.length + ninos24.length, ninas59.length + ninos59.length, ninas1014.length + ninos1014.length, totalGeneral]
+                    ['NIÑAS', ninas24.length, ninas59.length, ninas1014.length, totNinas],
+                    ['NIÑOS', ninos24.length, ninos59.length, ninos1014.length, totNinos],
+                    ['TOTAL POR EDADES', ninas24.length + ninos24.length, ninas59.length + ninas59.length, ninas1014.length + ninos1014.length, totNinas + totNinos]
                 ],
                 theme: 'grid',
-                styles: { fontSize: 8, cellPadding: 1.5, halign: 'center', textColor: [0, 0, 0] },
-                headStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold' },
+                headStyles: { fillColor: [200, 200, 200], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' },
+                styles: { fontSize: 8, halign: 'center' },
                 columnStyles: { 0: { halign: 'left', fontStyle: 'bold' } }
             });
 
-            let finalY = doc.lastAutoTable.finalY + 2;
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(9);
-            doc.text(`TOTAL GENERAL: ${totalGeneral}`, 14, finalY + 4);
+            startY = doc.lastAutoTable.finalY + 6;
 
-            // 4. Listado Nominal con subtítulos de edad idénticos
-            let maxLen = Math.max(ninas24.length, ninos24.length, ninas59.length, ninos59.length, ninas1014.length, ninos1014.length, 1);
-            let rowsNombres = [];
+            // 5. Tabla de Listado Nominal Dividido por Edades (Estructura exactísima de 4 columnas)
+            let rowsNominal = [];
 
-            // Bloque 2-4 años
-            rowsNombres.push([{ content: '2-4 AÑOS', colSpan: 3, styles: { fillColor: [245, 245, 245], fontStyle: 'bold', halign: 'center' } }]);
-            let max24 = Math.max(ninas24.length, ninos24.length, 1);
-            for(let i=0; i<max24; i++) {
-                rowsNombres.push([
+            // Bloque 2-4 Años
+            rowsNominal.push([{ content: '2 - 4 AÑOS', colSpan: 4, styles: { fillColor: [230, 230, 230], fontStyle: 'bold', halign: 'center' } }]);
+            let max24 = Math.max(ninas24.length, ninos24.length);
+            for (let i = 0; i < max24; i++) {
+                rowsNominal.push([
+                    i + 1,
                     ninas24[i] ? ninas24[i].nombre_completo : '',
                     i + 1,
                     ninos24[i] ? ninos24[i].nombre_completo : ''
                 ]);
             }
 
-            // Bloque 5-9 años
-            rowsNombres.push([{ content: '5-9 AÑOS', colSpan: 3, styles: { fillColor: [245, 245, 245], fontStyle: 'bold', halign: 'center' } }]);
-            let max59 = Math.max(ninas59.length, ninos59.length, 1);
-            for(let i=0; i<max59; i++) {
-                rowsNombres.push([
+            // Bloque 5-9 Años
+            rowsNominal.push([{ content: '5 - 9 AÑOS', colSpan: 4, styles: { fillColor: [230, 230, 230], fontStyle: 'bold', halign: 'center' } }]);
+            let max59 = Math.max(ninas59.length, ninos59.length);
+            for (let i = 0; i < max59; i++) {
+                rowsNominal.push([
+                    max24 + i + 1,
                     ninas59[i] ? ninas59[i].nombre_completo : '',
                     max24 + i + 1,
                     ninos59[i] ? ninos59[i].nombre_completo : ''
                 ]);
             }
 
-            // Bloque 10-14 años
-            rowsNombres.push([{ content: '10-14 AÑOS', colSpan: 3, styles: { fillColor: [245, 245, 245], fontStyle: 'bold', halign: 'center' } }]);
-            let max1014 = Math.max(ninas1014.length, ninos1014.length, 1);
-            for(let i=0; i<max1014; i++) {
-                rowsNombres.push([
+            // Bloque 10-14 Años
+            rowsNominal.push([{ content: '10 - 14 AÑOS', colSpan: 4, styles: { fillColor: [230, 230, 230], fontStyle: 'bold', halign: 'center' } }]);
+            let max1014 = Math.max(ninas1014.length, ninos1014.length);
+            for (let i = 0; i < max1014; i++) {
+                rowsNominal.push([
+                    max24 + max59 + i + 1,
                     ninas1014[i] ? ninas1014[i].nombre_completo : '',
                     max24 + max59 + i + 1,
                     ninos1014[i] ? ninos1014[i].nombre_completo : ''
@@ -968,16 +977,17 @@
             }
 
             doc.autoTable({
-                startY: finalY + 7,
-                head: [['NIÑAS', '#', 'NIÑOS']],
-                body: rowsNombres,
+                startY: startY,
+                head: [['#', 'NIÑAS', '#', 'NIÑOS']],
+                body: rowsNominal,
                 theme: 'grid',
-                styles: { fontSize: 8, cellPadding: 1.2, textColor: [0, 0, 0] },
-                headStyles: { fillColor: [230, 230, 230], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' },
-                columnStyles: { 
-                    0: { cellWidth: 85 }, 
-                    1: { cellWidth: 15, halign: 'center', fontStyle: 'bold' }, 
-                    2: { cellWidth: 85 } 
+                headStyles: { fillColor: [210, 210, 210], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' },
+                styles: { fontSize: 7, cellPadding: 1.5 },
+                columnStyles: {
+                    0: { cellWidth: 10, halign: 'center' },
+                    1: { cellWidth: 85 },
+                    2: { cellWidth: 10, halign: 'center' },
+                    3: { cellWidth: 85 }
                 }
             });
         }
