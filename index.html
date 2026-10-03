@@ -274,7 +274,7 @@
                 <!-- Tarjetas resumen superiores -->
                 <div class="row g-3 mb-4" id="tarjetas-totales"></div>
 
-                <!-- ZONA DE ARCHIVOS (ESTRUCTURA BASADA EN EL BOCETO) -->
+                <!-- ZONA DE ARCHIVOS -->
                 <div class="card-custom p-4 mb-4">
                     <h3 class="text-title-green h5 mb-3"><i class="bi bi-folder-symlink-fill me-2"></i>Zona de Archivos</h3>
                     <div class="row g-3">
@@ -309,7 +309,7 @@
                             <div class="border rounded p-3 bg-light text-center h-100 d-flex flex-column justify-content-between shadow-sm">
                                 <div>
                                     <h5 class="fw-bold text-dark h6 mb-2">Mezcla de Todos</h5>
-                                    <p class="text-muted text-xs mb-3" style="font-size: 0.85rem;">Documento completo unificado (Concentrado + Listado Nominal).</p>
+                                    <p class="text-muted text-xs mb-3" style="font-size: 0.85rem;">Documento completo unificado (Concentrado + Listado Nominal por iglesia).</p>
                                 </div>
                                 <div class="d-flex gap-1">
                                     <button onclick="descargarPDFMasterZona()" class="btn btn-danger btn-animated fw-bold btn-sm flex-fill">
@@ -841,36 +841,39 @@
             }
         }
 
-        // ================= FUNCIÓN AUXILIAR: RENDER CONCENTRADO (TABLA NUMÉRICA) =================
-        function renderBloqueConcentrado(doc, iglesia, logoBase64, startY) {
+        // ================= HELPER DE CABECERA CON DATOS DE LA IGLESIA =================
+        function renderEncabezadoIglesia(doc, iglesia, logoBase64, startY, titulo) {
             if (logoBase64) {
-                doc.addImage(logoBase64, 'JPEG', 14, startY, 18, 18);
+                doc.addImage(logoBase64, 'JPEG', 14, startY, 20, 20);
             }
             
+            // Título Principal
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(10);
-            doc.text("OPERATION", 35, startY + 5);
-            doc.text("Christmas", 35, startY + 9);
-            doc.setFontSize(7);
-            doc.text("Samaritan's Purse", 35, startY + 13);
-
             doc.setFontSize(11);
-            doc.text("CONCENTRADO GENERAL DE NIÑOS POR IGLESIA", 120, startY + 6, { align: 'center' });
-            doc.setFontSize(9);
+            doc.text(titulo, 120, startY + 6, { align: 'center' });
+            doc.setFontSize(8);
             doc.setFont("helvetica", "normal");
             doc.text("Operation Christmas Samaritan's Purse", 120, startY + 11, { align: 'center' });
 
-            let y = startY + 22;
-            doc.setFontSize(8);
+            // Separación Municipio y Estado
+            let municipiosEstado = (iglesia.municipio_estado || '').split(',');
+            let municipio = municipiosEstado[0] ? municipiosEstado[0].trim() : '';
+            let estado = municipiosEstado[1] ? municipiosEstado[1].trim() : '';
+
+            let y = startY + 24;
+            doc.setFontSize(7.5);
+            
+            // Columna Izquierda
             doc.setFont("helvetica", "bold");
             doc.text("NOMBRE DE LA IGLESIA:", 14, y);
             doc.setFont("helvetica", "normal");
             doc.text(iglesia.nombre_iglesia || "", 52, y);
 
+            // Columna Derecha
             doc.setFont("helvetica", "bold");
             doc.text("No. TELÉFONO Y CELULAR:", 115, y);
             doc.setFont("helvetica", "normal");
-            doc.text(iglesia.telefono || "", 155, y);
+            doc.text(iglesia.telefono || "", 158, y);
 
             y += 5;
             doc.setFont("helvetica", "bold");
@@ -879,9 +882,13 @@
             doc.text(iglesia.nombre_pastor || "", 48, y);
 
             doc.setFont("helvetica", "bold");
-            doc.text("MUNICIPIO, ESTADO:", 115, y);
+            doc.text("MUNICIPIO:", 115, y);
             doc.setFont("helvetica", "normal");
-            doc.text(iglesia.municipio_estado || "", 145, y);
+            doc.text(municipio, 133, y);
+            doc.setFont("helvetica", "bold");
+            doc.text("ESTADO:", 165, y);
+            doc.setFont("helvetica", "normal");
+            doc.text(estado, 180, y);
 
             y += 5;
             doc.setFont("helvetica", "bold");
@@ -890,9 +897,16 @@
             doc.text(iglesia.domicilio || "", 32, y);
 
             doc.setFont("helvetica", "bold");
-            doc.text("FECHA DE ENTREGA:", 115, y);
+            doc.text("FECHA DE ENTREGA DE LA LISTA:", 115, y);
             doc.setFont("helvetica", "normal");
-            doc.text(iglesia.fecha_entrega || "", 147, y);
+            doc.text(iglesia.fecha_entrega || "", 165, y);
+
+            return y + 3;
+        }
+
+        // ================= RENDER DE BLOQUE CONCENTRADO (TABLA NUMÉRICA) =================
+        function renderBloqueConcentrado(doc, iglesia, logoBase64, startY) {
+            let finalY = renderEncabezadoIglesia(doc, iglesia, logoBase64, startY, "CONCENTRADO GENERAL DE NIÑOS POR IGLESIA");
 
             let ninas24 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '2-4').length;
             let ninos24 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '2-4').length;
@@ -905,7 +919,7 @@
             let totNinos = ninos24 + ninos59 + ninos1014;
 
             doc.autoTable({
-                startY: y + 4,
+                startY: finalY + 2,
                 head: [['EDADES', '2-4', '5-9', '10-14', 'TOTAL']],
                 body: [
                     ['NIÑAS', ninas24, ninas59, ninas1014, totNinas],
@@ -914,12 +928,69 @@
                 ],
                 theme: 'grid',
                 headStyles: { fillColor: [40, 167, 69], textColor: [255, 255, 255], fontStyle: 'bold', halign: 'center' },
-                styles: { fontSize: 8, halign: 'center', cellPadding: 2 },
-                columnStyles: { 0: { halign: 'left', fontStyle: 'bold' } }
+                styles: { fontSize: 8, halign: 'center', cellPadding: 1.5 },
+                columnStyles: { 0: { halign: 'left', fontStyle: 'bold', cellWidth: 45 } }
             });
+
+            return doc.lastAutoTable.finalY;
         }
 
-        // 1. DESCARGA ARCHIVO: GENERAL CONCENTRADO (2 REGISTROS POR HOJA)
+        // ================= RENDER DE BLOQUE LISTADO (NOMBRES NOMINALES) =================
+        function renderBloqueListado(doc, iglesia, logoBase64, startY, incluirEncabezado = true) {
+            let finalY = startY;
+            if (incluirEncabezado) {
+                finalY = renderEncabezadoIglesia(doc, iglesia, logoBase64, startY, "LISTADO GENERAL DE NIÑOS POR IGLESIA");
+            }
+
+            let ninas24 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '2-4');
+            let ninos24 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '2-4');
+            let ninas59 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '5-9');
+            let ninos59 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '5-9');
+            let ninas1014 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '10-14');
+            let ninos1014 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '10-14');
+
+            let rowsNominal = [];
+
+            // Sección 2-4
+            rowsNominal.push([{ content: 'NIÑOS 2-4', colSpan: 4, styles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' } }]);
+            let max24 = Math.max(ninas24.length, ninos24.length);
+            for (let i = 0; i < max24; i++) {
+                rowsNominal.push([i + 1, ninos24[i] ? ninos24[i].nombre_completo : '', i + 1, ninas24[i] ? ninas24[i].nombre_completo : '']);
+            }
+
+            // Sección 5-9
+            rowsNominal.push([{ content: 'NIÑOS 5-9', colSpan: 4, styles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' } }]);
+            let max59 = Math.max(ninas59.length, ninos59.length);
+            for (let i = 0; i < max59; i++) {
+                rowsNominal.push([i + 1, ninos59[i] ? ninos59[i].nombre_completo : '', i + 1, ninas59[i] ? ninas59[i].nombre_completo : '']);
+            }
+
+            // Sección 10-14
+            rowsNominal.push([{ content: 'NIÑOS 10-14', colSpan: 4, styles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' } }]);
+            let max1014 = Math.max(ninas1014.length, ninos1014.length);
+            for (let i = 0; i < max1014; i++) {
+                rowsNominal.push([i + 1, ninos1014[i] ? ninos1014[i].nombre_completo : '', i + 1, ninas1014[i] ? ninas1014[i].nombre_completo : '']);
+            }
+
+            doc.autoTable({
+                startY: finalY + 2,
+                head: [['#', 'NIÑOS', '#', 'NIÑAS']],
+                body: rowsNominal,
+                theme: 'grid',
+                headStyles: { fillColor: [40, 167, 69], textColor: [255, 255, 255], fontStyle: 'bold', halign: 'center' },
+                styles: { fontSize: 7, cellPadding: 1 },
+                columnStyles: {
+                    0: { cellWidth: 8, halign: 'center' },
+                    1: { cellWidth: 83 },
+                    2: { cellWidth: 8, halign: 'center' },
+                    3: { cellWidth: 83 }
+                }
+            });
+
+            return doc.lastAutoTable.finalY;
+        }
+
+        // 1. DESCARGA: GENERAL CONCENTRADO (2 FORMATOS POR PÁGINA)
         async function descargarGeneralConcentradoPDF() {
             if (!datosIglesiasZona || datosIglesiasZona.length === 0) {
                 alert('No hay iglesias registradas en esta zona.');
@@ -933,19 +1004,11 @@
             for (let i = 0; i < datosIglesiasZona.length; i += 2) {
                 if (i > 0) doc.addPage();
 
-                // Registro 1 (Arriba)
+                // Formato Superior
                 renderBloqueConcentrado(doc, datosIglesiasZona[i], logoBase64, 10);
 
-                // Registro 2 (Abajo - Si existe)
+                // Formato Inferior (si existe)
                 if (i + 1 < datosIglesiasZona.length) {
-                    // Línea punteada de corte
-                    doc.setLineWidth(0.5);
-                    doc.setLineDashPattern([3, 3], 0);
-                    doc.line(10, 145, 200, 145);
-                    doc.setFontSize(12);
-                    doc.text("✂", 195, 144);
-                    doc.setLineDashPattern([], 0);
-
                     renderBloqueConcentrado(doc, datosIglesiasZona[i + 1], logoBase64, 150);
                 }
             }
@@ -953,8 +1016,27 @@
             doc.save(`General_Concentrado_Zona_${zonaActualId}.pdf`);
         }
 
-        // 2. DESCARGA ARCHIVO: GENERAL LISTADO (NOMBRES COMPLETOS POR IGLESIA)
+        // 2. DESCARGA: GENERAL LISTADO (NOMINAL POR EDADES)
         async function descargarGeneralListadoPDF() {
+            if (!datosIglesiasZona || datosIglesiasZona.length === 0) {
+                alert('No hay iglesias registradas en esta zona.');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            let doc = new jsPDF();
+            let logoBase64 = await obtenerLogoBase64();
+
+            for (let index = 0; index < datosIglesiasZona.length; index++) {
+                if (index > 0) doc.addPage();
+                renderBloqueListado(doc, datosIglesiasZona[index], logoBase64, 10, true);
+            }
+
+            doc.save(`General_Listado_Zona_${zonaActualId}.pdf`);
+        }
+
+        // 3. DESCARGA: MEZCLA DE TODOS (CONCENTRADO + LISTADO DEBAJO)
+        async function descargarPDFMasterZona() {
             if (!datosIglesiasZona || datosIglesiasZona.length === 0) {
                 alert('No hay iglesias registradas en esta zona.');
                 return;
@@ -968,118 +1050,14 @@
                 if (index > 0) doc.addPage();
                 let iglesia = datosIglesiasZona[index];
 
-                if (logoBase64) {
-                    doc.addImage(logoBase64, 'JPEG', 14, 10, 18, 18);
-                }
+                // Bloque superior: Concentrado
+                let lastY = renderBloqueConcentrado(doc, iglesia, logoBase64, 10);
 
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(11);
-                doc.text("LISTADO GENERAL DE NIÑOS POR IGLESIA", 120, 16, { align: 'center' });
-                doc.setFontSize(9);
-                doc.setFont("helvetica", "normal");
-                doc.text("Operation Christmas Samaritan's Purse", 120, 21, { align: 'center' });
-
-                let y = 32;
-                doc.setFontSize(8);
-                doc.setFont("helvetica", "bold");
-                doc.text("NOMBRE DE LA IGLESIA:", 14, y);
-                doc.setFont("helvetica", "normal");
-                doc.text(iglesia.nombre_iglesia || "", 52, y);
-
-                doc.setFont("helvetica", "bold");
-                doc.text("No. TELÉFONO Y CELULAR:", 115, y);
-                doc.setFont("helvetica", "normal");
-                doc.text(iglesia.telefono || "", 155, y);
-
-                y += 5;
-                doc.setFont("helvetica", "bold");
-                doc.text("NOMBRE DEL PASTOR:", 14, y);
-                doc.setFont("helvetica", "normal");
-                doc.text(iglesia.nombre_pastor || "", 48, y);
-
-                doc.setFont("helvetica", "bold");
-                doc.text("MUNICIPIO, ESTADO:", 115, y);
-                doc.setFont("helvetica", "normal");
-                doc.text(iglesia.municipio_estado || "", 145, y);
-
-                y += 5;
-                doc.setFont("helvetica", "bold");
-                doc.text("DOMICILIO:", 14, y);
-                doc.setFont("helvetica", "normal");
-                doc.text(iglesia.domicilio || "", 32, y);
-
-                doc.setFont("helvetica", "bold");
-                doc.text("FECHA DE ENTREGA:", 115, y);
-                doc.setFont("helvetica", "normal");
-                doc.text(iglesia.fecha_entrega || "", 147, y);
-
-                let ninas24 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '2-4');
-                let ninos24 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '2-4');
-                let ninas59 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '5-9');
-                let ninos59 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '5-9');
-                let ninas1014 = iglesia.ninos.filter(n => n.genero === 'niña' && n.rango_edad === '10-14');
-                let ninos1014 = iglesia.ninos.filter(n => n.genero === 'niño' && n.rango_edad === '10-14');
-
-                let rowsNominal = [];
-
-                rowsNominal.push([{ content: 'NIÑOS 2-4', colSpan: 4, styles: { fillColor: [40, 167, 69], textColor: [255, 255, 255], fontStyle: 'bold', halign: 'center' } }]);
-                let max24 = Math.max(ninas24.length, ninos24.length);
-                for (let i = 0; i < max24; i++) {
-                    rowsNominal.push([i + 1, ninos24[i] ? ninos24[i].nombre_completo : '', i + 1, ninas24[i] ? ninas24[i].nombre_completo : '']);
-                }
-
-                rowsNominal.push([{ content: 'NIÑOS 5-9', colSpan: 4, styles: { fillColor: [40, 167, 69], textColor: [255, 255, 255], fontStyle: 'bold', halign: 'center' } }]);
-                let max59 = Math.max(ninas59.length, ninos59.length);
-                for (let i = 0; i < max59; i++) {
-                    rowsNominal.push([max24 + i + 1, ninos59[i] ? ninos59[i].nombre_completo : '', max24 + i + 1, ninas59[i] ? ninas59[i].nombre_completo : '']);
-                }
-
-                rowsNominal.push([{ content: 'NIÑOS 10-14', colSpan: 4, styles: { fillColor: [40, 167, 69], textColor: [255, 255, 255], fontStyle: 'bold', halign: 'center' } }]);
-                let max1014 = Math.max(ninas1014.length, ninos1014.length);
-                for (let i = 0; i < max1014; i++) {
-                    rowsNominal.push([max24 + max59 + i + 1, ninos1014[i] ? ninos1014[i].nombre_completo : '', max24 + max59 + i + 1, ninas1014[i] ? ninas1014[i].nombre_completo : '']);
-                }
-
-                doc.autoTable({
-                    startY: y + 6,
-                    head: [['#', 'NIÑOS', '#', 'NIÑAS']],
-                    body: rowsNominal,
-                    theme: 'grid',
-                    headStyles: { fillColor: [220, 220, 220], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' },
-                    styles: { fontSize: 7, cellPadding: 1.5 },
-                    columnStyles: {
-                        0: { cellWidth: 10, halign: 'center' },
-                        1: { cellWidth: 85 },
-                        2: { cellWidth: 10, halign: 'center' },
-                        3: { cellWidth: 85 }
-                    }
-                });
+                // Bloque inferior: Listado nominal directamente debajo
+                renderBloqueListado(doc, iglesia, logoBase64, lastY + 8, false);
             }
 
-            doc.save(`General_Listado_Zona_${zonaActualId}.pdf`);
-        }
-
-        // 3. MEZCLA (DOCUMENTO COMPLETO UNIFICADO)
-        async function generarEstructuraPDFOficial(doc, iglesia, logoBase64, esNuevaPagina) {
-            if (esNuevaPagina) doc.addPage();
-            renderBloqueConcentrado(doc, iglesia, logoBase64, 10);
-        }
-
-        async function descargarPDFMasterZona() {
-            if (!datosIglesiasZona || datosIglesiasZona.length === 0) {
-                alert('No hay iglesias registradas en esta zona.');
-                return;
-            }
-
-            const { jsPDF } = window.jspdf;
-            let doc = new jsPDF();
-            let logoBase64 = await obtenerLogoBase64();
-
-            for (let index = 0; index < datosIglesiasZona.length; index++) {
-                await generarEstructuraPDFOficial(doc, datosIglesiasZona[index], logoBase64, index > 0);
-            }
-
-            doc.save(`Concentrado_Master_Zona_${zonaActualId}_Oficial.pdf`);
+            doc.save(`Mezcla_Concentrado_y_Listado_Zona_${zonaActualId}.pdf`);
         }
 
         function descargarExcelMasterZona() {
@@ -1104,7 +1082,9 @@
             let doc = new jsPDF();
             let logoBase64 = await obtenerLogoBase64();
 
-            await generarEstructuraPDFOficial(doc, iglesiaSeleccionada, logoBase64, false);
+            let lastY = renderBloqueConcentrado(doc, iglesiaSeleccionada, logoBase64, 10);
+            renderBloqueListado(doc, iglesiaSeleccionada, logoBase64, lastY + 8, false);
+            
             doc.save(`${iglesiaSeleccionada.nombre_iglesia}_Oficial.pdf`);
         }
 
